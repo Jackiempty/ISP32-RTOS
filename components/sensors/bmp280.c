@@ -2,8 +2,6 @@
 
 #include <stdint.h>
 
-#include "bsp.h"
-
 #define TAG "BMP280"
 
 static pressure_sensor_t pressure_sensor_instance;

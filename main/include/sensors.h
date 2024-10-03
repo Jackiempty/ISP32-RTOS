@@ -10,7 +10,7 @@
 
 #define sensor_freq 100
 
-void sensors_init(void *);
+void sensors_init();
 void sensors_task(void *);
 
 #endif
