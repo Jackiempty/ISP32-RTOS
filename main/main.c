@@ -23,5 +23,5 @@ void app_main() {
     sensors_init();
 
     xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
-    xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(1000 / sensor_freq), pdTRUE, (void*)0, sensors_task), 0);
+    xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void*)0, sensors_task), 0);
 }
