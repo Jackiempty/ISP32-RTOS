@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "bmp280.h"
+#include "gps.h"
 
 #define sensor_freq 100
 

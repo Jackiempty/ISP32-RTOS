@@ -1,2 +1,2 @@
-set(srcs "bmp280.c")
-idf_component_register(SRCS "${srcs}" INCLUDE_DIRS "." REQUIRES bsp)
+set(srcs "bmp280.c" "gps.c") # imu.c
+idf_component_register(SRCS "${srcs}" INCLUDE_DIRS "." REQUIRES bsp ahrs)
