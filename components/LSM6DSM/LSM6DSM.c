@@ -253,5 +253,5 @@ void writeRegister(uint8_t subAddress, uint8_t data) {
 
 void readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest) {
     // cpi2c_readRegisters(_i2c, subAddress, count, dest);
-    i2c_read_bytes(I2C_MASTER_NUM, ADDRESS, subAddress, dest);
+    i2c_read_bytes(I2C_MASTER_NUM, ADDRESS, subAddress, dest, count);
 }
