@@ -3,7 +3,9 @@ SERIAL_PORT=$(shell ls -d /dev/* | grep usbmodem | head -n1)
 
 .PHONY: all build post_build clean flash serial
 
-all: build post_build set_target flash
+all: build post_build flash
+
+update: build post_build flash serial
 
 set_target: sdkconfig
 	idf.py set-target $(SoC)

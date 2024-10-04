@@ -17,4 +17,5 @@ void sensors_task(void *arg) {
     printf("gps_longitude: %ld\n", gps_instance->longitude);
     printf("gps_latitude: %ld\n", gps_instance->latitude);
     printf("gps_altitude: %f\n", gps_instance->altitude);
+    printf("--------------------------\n");
 }
