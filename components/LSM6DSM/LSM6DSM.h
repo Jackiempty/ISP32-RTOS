@@ -25,8 +25,11 @@
 
 #pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+
+#include "i2c-easy.h"
+#include "bsp.h"
 
 // One ifdef needed to support delay() cross-platform
 #if defined(ARDUINO)
@@ -157,44 +160,44 @@ http://www.st.com/content/ccc/resource/technical/document/datasheet/76/27/cf/88/
 
 typedef enum {
 
-  // Note order!
-  AFS_2G,
-  AFS_16G,
-  AFS_4G,
-  AFS_8G
+    // Note order!
+    AFS_2G,
+    AFS_16G,
+    AFS_4G,
+    AFS_8G
 
 } Ascale_t;
 
 typedef enum {
 
-  GFS_245DPS,
-  GFS_500DPS,
-  GFS_1000DPS,
-  GFS_2000DPS
+    GFS_245DPS,
+    GFS_500DPS,
+    GFS_1000DPS,
+    GFS_2000DPS
 
 } Gscale_t;
 
 typedef enum {
 
-  ODR_12_5Hz,
-  ODR_26Hz,
-  ODR_52Hz,
-  ODR_104Hz,
-  ODR_208Hz,
-  ODR_416Hz,
-  ODR_833Hz,
-  ODR_1660Hz,
-  ODR_3330Hz,
-  ODR_6660Hz
+    ODR_12_5Hz,
+    ODR_26Hz,
+    ODR_52Hz,
+    ODR_104Hz,
+    ODR_208Hz,
+    ODR_416Hz,
+    ODR_833Hz,
+    ODR_1660Hz,
+    ODR_3330Hz,
+    ODR_6660Hz
 
 } Rate_t;
 
 typedef enum {
 
-  ERROR_NONE,
-  ERROR_CONNECT,
-  ERROR_ID,
-  ERROR_SELFTEST
+    ERROR_NONE,
+    ERROR_CONNECT,
+    ERROR_ID,
+    ERROR_SELFTEST
 
 } Error_t;
 
@@ -218,7 +221,7 @@ uint8_t _i2c;  // Support for wiringPi, I2CDEV
 // Public
 Error_t begin(1);
 
-void calibrate(float* gyroBias, float* accelBias);
+void calibrate(float *gyroBias, float *accelBias);
 
 void clearInterrupt(void);
 
@@ -232,10 +235,9 @@ void readData(int16_t data[7]);
 
 // Private
 // Self-test helpers
-bool inBounds(int16_t ptest[3], int16_t ntest[3], int16_t nom[3], float res,
-              float minval, float maxval);
+bool inBounds(int16_t ptest[3], int16_t ntest[3], int16_t nom[3], float res, float minval, float maxval);
 bool outOfBounds(float val, float minval, float maxval);
 
 void writeRegister(uint8_t subAddress, uint8_t data);
 uint8_t readRegister(uint8_t subAddress);
-void readRegisters(uint8_t subAddress, uint8_t count, uint8_t* dest);
+void readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest);
