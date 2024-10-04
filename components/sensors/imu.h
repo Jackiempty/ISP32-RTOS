@@ -5,7 +5,7 @@
 
 #include "MadgwickAHRS.h"
 #include "esp_system.h"
-// #include "LSM6DSM.h"
+#include "LSM6DSM.h"
 
 typedef struct {
   uint32_t freq;

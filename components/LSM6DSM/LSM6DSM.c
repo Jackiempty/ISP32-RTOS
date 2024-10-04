@@ -22,7 +22,7 @@
 
 #include "LSM6DSM.h"
 
-#include <CrossPlatformI2C_Core.h>
+// #include <CrossPlatformI2C_Core.h>
 #include <math.h>
 
 /*
@@ -87,23 +87,23 @@ Error_t begin(uint8_t bus) {
   return selfTest() ? ERROR_NONE : ERROR_SELFTEST;
 }
 
-void readData(float& ax, float& ay, float& az, float& gx, float& gy,
-              float& gz) {
+void readData(float *ax, float *ay, float *az, float *gx, float *gy,
+              float *gz) {
   int16_t data[7];
 
   readData(data);
 
   // Calculate the accleration value into actual g's
-  ax = (float)data[4] * _ares -
+  *ax = (float)data[4] * _ares -
        _accelBias[0];  // get actual g value, this depends on scale being set
-  ay = (float)data[5] * _ares - _accelBias[1];
-  az = (float)data[6] * _ares - _accelBias[2];
+  *ay = (float)data[5] * _ares - _accelBias[1];
+  *az = (float)data[6] * _ares - _accelBias[2];
 
   // Calculate the gyro value into actual degrees per second
-  gx = (float)data[1] * _gres -
+  *gx = (float)data[1] * _gres -
        _gyroBias[0];  // get actual gyro value, this depends on scale being set
-  gy = (float)data[2] * _gres - _gyroBias[1];
-  gz = (float)data[3] * _gres - _gyroBias[2];
+  *gy = (float)data[2] * _gres - _gyroBias[1];
+  *gz = (float)data[3] * _gres - _gyroBias[2];
 }
 
 bool checkNewData(void) {
