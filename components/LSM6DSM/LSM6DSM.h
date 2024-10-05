@@ -219,7 +219,7 @@ float _gres;
 uint8_t _i2c;  // Support for wiringPi, I2CDEV
 
 // Public
-Error_t begin(1);
+Error_t lsm6dsm_init();
 
 void calibrate(float *gyroBias, float *accelBias);
 
@@ -231,7 +231,7 @@ void readData(float *ax, float *ay, float *az, float *gx, float *gy, float *gz);
 
 bool selfTest(void);
 
-void readData(int16_t data[7]);
+void _readData(int16_t data[7]);
 
 // Private
 // Self-test helpers

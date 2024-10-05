@@ -58,7 +58,7 @@ static inline void rotate(vector_t *v) {
 void imu_init(calibration_t *_cal, uint32_t frequency) {
   /* Init the MPU and AHRS */
   cal = _cal;
-  i2c_mpu9250_init(cal);
+  lsm6dsm_init();
   MadgwickAHRSinit(frequency, 0.8);
   imu_instance.freq = frequency;
   imu_instance.velocity.x = 0;

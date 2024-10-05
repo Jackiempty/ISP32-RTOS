@@ -52,8 +52,8 @@ LSM6DSM::LSM6DSM(Ascale_t ascale, Gscale_t gscale, Rate_t aodr, Rate_t godr) {
 }
  */
 
-Error_t begin(uint8_t bus) {
-    _i2c = cpi2c_open(ADDRESS, bus);
+Error_t lsm6dsm_init() {
+    // _i2c = cpi2c_open(ADDRESS, bus);
 
     if (readRegister(WHO_AM_I) != 0x6A) {
         return ERROR_ID;
@@ -90,7 +90,7 @@ Error_t begin(uint8_t bus) {
 void readData(float *ax, float *ay, float *az, float *gx, float *gy, float *gz) {
     int16_t data[7];
 
-    readData(data);
+    _readData(data);
 
     // Calculate the accleration value into actual g's
     *ax = (float)data[4] * _ares - _accelBias[0];  // get actual g value, this depends on scale being set
@@ -117,7 +117,7 @@ bool selfTest() {
     int16_t accelNom[3] = {0, 0, 0};
     int16_t gyroNom[3] = {0, 0, 0};
 
-    readData(temp);
+    _readData(temp);
     accelNom[0] = temp[4];
     accelNom[1] = temp[5];
     accelNom[2] = temp[6];
@@ -127,28 +127,28 @@ bool selfTest() {
 
     writeRegister(CTRL5_C, 0x01);  // positive accel self test
     delay(100);                    // let accel respond
-    readData(temp);
+    _readData(temp);
     accelPTest[0] = temp[4];
     accelPTest[1] = temp[5];
     accelPTest[2] = temp[6];
 
     writeRegister(CTRL5_C, 0x03);  // negative accel self test
     delay(100);                    // let accel respond
-    readData(temp);
+    _readData(temp);
     accelNTest[0] = temp[4];
     accelNTest[1] = temp[5];
     accelNTest[2] = temp[6];
 
     writeRegister(CTRL5_C, 0x04);  // positive gyro self test
     delay(100);                    // let gyro respond
-    readData(temp);
+    _readData(temp);
     gyroPTest[0] = temp[1];
     gyroPTest[1] = temp[2];
     gyroPTest[2] = temp[3];
 
     writeRegister(CTRL5_C, 0x0C);  // negative gyro self test
     delay(100);                    // let gyro respond
-    readData(temp);
+    _readData(temp);
     gyroNTest[0] = temp[1];
     gyroNTest[1] = temp[2];
     gyroNTest[2] = temp[3];
@@ -181,7 +181,7 @@ void calibrate(float *gyroBias, float *accelBias) {
     int32_t sum[7] = {0, 0, 0, 0, 0, 0, 0};
 
     for (int ii = 0; ii < 128; ii++) {
-        readData(temp);
+        _readData(temp);
         sum[1] += temp[1];
         sum[2] += temp[2];
         sum[3] += temp[3];
@@ -225,10 +225,10 @@ void calibrate(float *gyroBias, float *accelBias) {
 
 void clearInterrupt(void) {
     int16_t data[7];
-    readData(data);
+    _readData(data);
 }
 
-void readData(int16_t destination[7]) {
+void _readData(int16_t destination[7]) {
     uint8_t rawData[14];                                       // x/y/z accel register data stored here
     readRegisters(OUT_TEMP_L, 14, &rawData[0]);                // Read the 14 raw data registers into data array
     destination[0] = ((int16_t)rawData[1] << 8) | rawData[0];  // Turn the MSB and LSB into a signed 16-bit value
