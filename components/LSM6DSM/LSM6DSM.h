@@ -28,8 +28,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "i2c-easy.h"
 #include "bsp.h"
+#include "i2c-easy.h"
 
 // One ifdef needed to support delay() cross-platform
 #if defined(ARDUINO)
@@ -43,9 +43,6 @@ void delay(uint32_t msec);
 #else
 #include <wiringPi.h>
 #endif
-
-#else
-void delay(uint32_t msec);
 #endif
 
 #define ADDRESS (0x6A)
@@ -201,35 +198,40 @@ typedef enum {
 
 } Error_t;
 
-// Computed by calibrate()
-float _accelBias[3];
-float _gyroBias[3];
+typedef struct {
+    float x, y, z;
+} vector_t;
 
-// Stored by constructor
-Ascale_t _ascale;
-Gscale_t _gscale;
-Rate_t _aodr;
-Rate_t _godr;
+typedef struct {
+    Ascale_t _ascale;
+    Gscale_t _gscale;
+    Rate_t _aodr;
+    Rate_t _godr;
+    float _ares;
+    float _gres;
+    float _accelBias[3];
+    float _gyroBias[3];
+} calibration_t;
 
-// Computed by constructor
-float _ares;
-float _gres;
-
-// I^2C business
-uint8_t _i2c;  // Support for wiringPi, I2CDEV
+typedef struct {
+    // uint32_t freq;
+    vector_t a, g;
+    vector_t velocity;
+    float heading, pitch, roll;
+} imu_t;
 
 // Public
-Error_t lsm6dsm_init();
+Error_t lsm6dsm_init(calibration_t *);
 
-void calibrate(float *gyroBias, float *accelBias);
+void calibrate(calibration_t *);
 
 void clearInterrupt(void);
 
 bool checkNewData(void);
 
-void readData(float *ax, float *ay, float *az, float *gx, float *gy, float *gz);
+void readData(imu_t *, calibration_t *);
 
-bool selfTest(void);
+bool selfTest(calibration_t *);
 
 void _readData(int16_t data[7]);
 

@@ -3,18 +3,10 @@
 
 #include <math.h>
 
-#include "MadgwickAHRS.h"
-#include "esp_system.h"
 #include "LSM6DSM.h"
+#include "esp_system.h"
 
-typedef struct {
-  uint32_t freq;
-  vector_t a, g, m;
-  vector_t velocity;
-  float heading, pitch, roll;
-} imu_t;
-
-void imu_init(calibration_t*, uint32_t);
+void imu_init();
 void imu_update();
 imu_t* imu_fetch();
 

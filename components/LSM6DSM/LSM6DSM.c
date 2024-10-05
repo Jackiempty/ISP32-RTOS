@@ -22,12 +22,11 @@
 
 #include "LSM6DSM.h"
 
-// #include <CrossPlatformI2C_Core.h>
 #include <math.h>
 
 /*
 LSM6DSM::LSM6DSM(Ascale_t ascale, Gscale_t gscale, Rate_t aodr, Rate_t godr,
-                 float accelBias[3], float gyroBias[3]) {
+                 float cal->_accelBias[3], float cal->_gyroBias[3]) {
   _ascale = ascale;
   _gscale = gscale;
   _aodr = aodr;
@@ -40,20 +39,27 @@ LSM6DSM::LSM6DSM(Ascale_t ascale, Gscale_t gscale, Rate_t aodr, Rate_t godr,
   _gres = greses[gscale] / 32768.f;
 
   for (uint8_t k = 0; k < 3; ++k) {
-    _accelBias[k] = accelBias[k];
-    _gyroBias[k] = gyroBias[k];
+    _cal->_accelBias[k] = cal->_accelBias[k];
+    _cal->_gyroBias[k] = cal->_gyroBias[k];
   }
 }
 
 LSM6DSM::LSM6DSM(Ascale_t ascale, Gscale_t gscale, Rate_t aodr, Rate_t godr) {
-  float accelBias[3] = {0, 0, 0};
-  float gyroBias[3] = {0, 0, 0};
-  LSM6DSM(ascale, gscale, aodr, godr, accelBias, gyroBias);
+  float cal->_accelBias[3] = {0, 0, 0};
+  float cal->_gyroBias[3] = {0, 0, 0};
+  LSM6DSM(ascale, gscale, aodr, godr, cal->_accelBias, cal->_gyroBias);
 }
  */
 
-Error_t lsm6dsm_init() {
+Error_t lsm6dsm_init(calibration_t *cal) {
     // _i2c = cpi2c_open(ADDRESS, bus);
+    float areses[4] = {2, 16, 4, 8};
+    cal->_ares = areses[cal->_ascale] / 32768.f;
+
+    float greses[4] = {245, 500, 1000, 2000};
+    cal->_gres = greses[cal->_gscale] / 32768.f;
+
+    calibrate(cal);
 
     if (readRegister(WHO_AM_I) != 0x6A) {
         return ERROR_ID;
@@ -62,10 +68,10 @@ Error_t lsm6dsm_init() {
     // reset device
     uint8_t temp = readRegister(CTRL3_C);
     writeRegister(CTRL3_C, temp | 0x01);  // Set bit 0 to 1 to reset LSM6DSM
-    delay(100);                           // Wait for all registers to reset
-    writeRegister(CTRL1_XL, _aodr << 4 | _ascale << 2);
+    vTaskDelay(pdMS_TO_TICKS(100));       // Wait for all registers to reset
+    writeRegister(CTRL1_XL, cal->_aodr << 4 | cal->_ascale << 2);
 
-    writeRegister(CTRL2_G, _godr << 4 | _gscale << 2);
+    writeRegister(CTRL2_G, cal->_godr << 4 | cal->_gscale << 2);
 
     temp = readRegister(CTRL3_C);
 
@@ -81,26 +87,27 @@ Error_t lsm6dsm_init() {
     // interrupt handling
     writeRegister(DRDY_PULSE_CFG, 0x80);  // latch interrupt until data read
     writeRegister(INT1_CTRL, 0x03);       // enable  data ready interrupts on INT1
-    writeRegister(INT2_CTRL,
-                  0x40);  // enable significant motion interrupts on INT2
+    writeRegister(INT2_CTRL, 0x40);       // enable significant motion interrupts on INT2
 
-    return selfTest() ? ERROR_NONE : ERROR_SELFTEST;
+    return selfTest(cal) ? ERROR_NONE : ERROR_SELFTEST;
 }
 
-void readData(float *ax, float *ay, float *az, float *gx, float *gy, float *gz) {
+void readData(imu_t *imu_instance, calibration_t *cal) {
     int16_t data[7];
 
     _readData(data);
 
     // Calculate the accleration value into actual g's
-    *ax = (float)data[4] * _ares - _accelBias[0];  // get actual g value, this depends on scale being set
-    *ay = (float)data[5] * _ares - _accelBias[1];
-    *az = (float)data[6] * _ares - _accelBias[2];
+    imu_instance->a.x =
+        (float)data[4] * cal->_ares - cal->_accelBias[0];  // get actual g value, this depends on scale being set
+    imu_instance->a.y = (float)data[5] * cal->_ares - cal->_accelBias[1];
+    imu_instance->a.z = (float)data[6] * cal->_ares - cal->_accelBias[2];
 
     // Calculate the gyro value into actual degrees per second
-    *gx = (float)data[1] * _gres - _gyroBias[0];  // get actual gyro value, this depends on scale being set
-    *gy = (float)data[2] * _gres - _gyroBias[1];
-    *gz = (float)data[3] * _gres - _gyroBias[2];
+    imu_instance->g.x =
+        (float)data[1] * cal->_gres - cal->_gyroBias[0];  // get actual gyro value, this depends on scale being set
+    imu_instance->g.y = (float)data[2] * cal->_gres - cal->_gyroBias[1];
+    imu_instance->g.z = (float)data[3] * cal->_gres - cal->_gyroBias[2];
 }
 
 bool checkNewData(void) {
@@ -108,7 +115,7 @@ bool checkNewData(void) {
     return (bool)(readRegister(STATUS_REG) & 0x02);
 }
 
-bool selfTest() {
+bool selfTest(calibration_t *cal) {
     int16_t temp[7] = {0, 0, 0, 0, 0, 0, 0};
     int16_t accelPTest[3] = {0, 0, 0};
     int16_t accelNTest[3] = {0, 0, 0};
@@ -125,39 +132,39 @@ bool selfTest() {
     gyroNom[1] = temp[2];
     gyroNom[2] = temp[3];
 
-    writeRegister(CTRL5_C, 0x01);  // positive accel self test
-    delay(100);                    // let accel respond
+    writeRegister(CTRL5_C, 0x01);    // positive accel self test
+    vTaskDelay(pdMS_TO_TICKS(100));  // let accel respond
     _readData(temp);
     accelPTest[0] = temp[4];
     accelPTest[1] = temp[5];
     accelPTest[2] = temp[6];
 
-    writeRegister(CTRL5_C, 0x03);  // negative accel self test
-    delay(100);                    // let accel respond
+    writeRegister(CTRL5_C, 0x03);    // negative accel self test
+    vTaskDelay(pdMS_TO_TICKS(100));  // let accel respond
     _readData(temp);
     accelNTest[0] = temp[4];
     accelNTest[1] = temp[5];
     accelNTest[2] = temp[6];
 
-    writeRegister(CTRL5_C, 0x04);  // positive gyro self test
-    delay(100);                    // let gyro respond
+    writeRegister(CTRL5_C, 0x04);    // positive gyro self test
+    vTaskDelay(pdMS_TO_TICKS(100));  // let gyro respond
     _readData(temp);
     gyroPTest[0] = temp[1];
     gyroPTest[1] = temp[2];
     gyroPTest[2] = temp[3];
 
-    writeRegister(CTRL5_C, 0x0C);  // negative gyro self test
-    delay(100);                    // let gyro respond
+    writeRegister(CTRL5_C, 0x0C);    // negative gyro self test
+    vTaskDelay(pdMS_TO_TICKS(100));  // let gyro respond
     _readData(temp);
     gyroNTest[0] = temp[1];
     gyroNTest[1] = temp[2];
     gyroNTest[2] = temp[3];
 
-    writeRegister(CTRL5_C, 0x00);  // normal mode
-    delay(100);                    // let accel and gyro respond
+    writeRegister(CTRL5_C, 0x00);    // normal mode
+    vTaskDelay(pdMS_TO_TICKS(100));  // let accel and gyro respond
 
-    return inBounds(accelPTest, accelNTest, accelNom, _ares, ACCEL_MIN, ACCEL_MAX) &&
-           inBounds(gyroPTest, gyroNTest, gyroNom, _gres, GYRO_MIN, GYRO_MAX);
+    return (inBounds(accelPTest, accelNTest, accelNom, cal->_ares, ACCEL_MIN, ACCEL_MAX) &&
+            inBounds(gyroPTest, gyroNTest, gyroNom, cal->_gres, GYRO_MIN, GYRO_MAX));
 }
 
 bool inBounds(int16_t ptest[3], int16_t ntest[3], int16_t nom[3], float res, float minval, float maxval) {
@@ -176,7 +183,7 @@ bool outOfBounds(float val, float minval, float maxval) {
     return val < minval || val > maxval;
 }
 
-void calibrate(float *gyroBias, float *accelBias) {
+void calibrate(calibration_t *cal) {
     int16_t temp[7] = {0, 0, 0, 0, 0, 0, 0};
     int32_t sum[7] = {0, 0, 0, 0, 0, 0, 0};
 
@@ -188,39 +195,34 @@ void calibrate(float *gyroBias, float *accelBias) {
         sum[4] += temp[4];
         sum[5] += temp[5];
         sum[6] += temp[6];
-        delay(50);
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
 
-    gyroBias[0] = sum[1] * _gres / 128.0f;
-    gyroBias[1] = sum[2] * _gres / 128.0f;
-    gyroBias[2] = sum[3] * _gres / 128.0f;
-    accelBias[0] = sum[4] * _ares / 128.0f;
-    accelBias[1] = sum[5] * _ares / 128.0f;
-    accelBias[2] = sum[6] * _ares / 128.0f;
+    cal->_gyroBias[0] = sum[1] * cal->_gres / 128.0f;
+    cal->_gyroBias[1] = sum[2] * cal->_gres / 128.0f;
+    cal->_gyroBias[2] = sum[3] * cal->_gres / 128.0f;
+    cal->_accelBias[0] = sum[4] * cal->_ares / 128.0f;
+    cal->_accelBias[1] = sum[5] * cal->_ares / 128.0f;
+    cal->_accelBias[2] = sum[6] * cal->_ares / 128.0f;
 
-    if (accelBias[0] > 0.8f) {
-        accelBias[0] -= 1.0f;
+    if (cal->_accelBias[0] > 0.8f) {
+        cal->_accelBias[0] -= 1.0f;
     }  // Remove gravity from the x-axis accelerometer bias calculation
-    if (accelBias[0] < -0.8f) {
-        accelBias[0] += 1.0f;
+    if (cal->_accelBias[0] < -0.8f) {
+        cal->_accelBias[0] += 1.0f;
     }  // Remove gravity from the x-axis accelerometer bias calculation
-    if (accelBias[1] > 0.8f) {
-        accelBias[1] -= 1.0f;
+    if (cal->_accelBias[1] > 0.8f) {
+        cal->_accelBias[1] -= 1.0f;
     }  // Remove gravity from the y-axis accelerometer bias calculation
-    if (accelBias[1] < -0.8f) {
-        accelBias[1] += 1.0f;
+    if (cal->_accelBias[1] < -0.8f) {
+        cal->_accelBias[1] += 1.0f;
     }  // Remove gravity from the y-axis accelerometer bias calculation
-    if (accelBias[2] > 0.8f) {
-        accelBias[2] -= 1.0f;
+    if (cal->_accelBias[2] > 0.8f) {
+        cal->_accelBias[2] -= 1.0f;
     }  // Remove gravity from the z-axis accelerometer bias calculation
-    if (accelBias[2] < -0.8f) {
-        accelBias[2] += 1.0f;
+    if (cal->_accelBias[2] < -0.8f) {
+        cal->_accelBias[2] += 1.0f;
     }  // Remove gravity from the z-axis accelerometer bias calculation
-
-    for (uint8_t k = 0; k < 3; ++k) {
-        _accelBias[k] = accelBias[k];
-        _gyroBias[k] = gyroBias[k];
-    }
 }
 
 void clearInterrupt(void) {
@@ -246,10 +248,10 @@ uint8_t readRegister(uint8_t subAddress) {
     return temp;
 }
 
-void writeRegister(uint8_t subAddress, uint8_t data) { 
+void writeRegister(uint8_t subAddress, uint8_t data) {
     // cpi2c_writeRegister(_i2c, subAddress, data);
     i2c_write_byte(I2C_MASTER_NUM, ADDRESS, subAddress, data);
-  }
+}
 
 void readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest) {
     // cpi2c_readRegisters(_i2c, subAddress, count, dest);

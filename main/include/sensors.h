@@ -8,6 +8,7 @@
 
 #include "bmp280.h"
 #include "gps.h"
+#include "imu.h"
 
 #define sensor_freq 100
 
