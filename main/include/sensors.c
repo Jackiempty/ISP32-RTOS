@@ -23,5 +23,5 @@ void sensors_task(void* arg) {
     printf("gps_altitude: %f\n", gps_instance->altitude);
     printf("imu_accel: x: %f, y: %f, z: %f\n", imu_instance->a.x, imu_instance->a.y, imu_instance->a.z);
     printf("imu_gyro: x: %f, y: %f, z: %f\n", imu_instance->g.x, imu_instance->g.y, imu_instance->g.z);
-    printf("--------------------------\n");
+    printf("----------------------------------------------\n");
 }

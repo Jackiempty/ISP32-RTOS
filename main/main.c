@@ -7,13 +7,6 @@
 
 #include "include/sensors.h"
 
-// void task1() {
-//     while (1) {
-//         printf("hello world\n");
-//         vTaskDelay(pdMS_TO_TICKS(1000));
-//     }
-// }
-
 void app_main() {
     gpio_init();
     i2c_init();

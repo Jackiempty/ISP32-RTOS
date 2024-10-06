@@ -23,6 +23,7 @@ static imu_t imu_instance;
 
 void imu_init() {
     /* Init the MPU and AHRS */
+    printf("IMU init...\n");
     lsm6dsm_init(&cal);
     // MadgwickAHRSinit(100, 0.8);
     // imu_instance.freq = frequency;

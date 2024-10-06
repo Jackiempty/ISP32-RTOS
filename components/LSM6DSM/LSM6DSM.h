@@ -45,7 +45,8 @@ void delay(uint32_t msec);
 #endif
 #endif
 
-#define ADDRESS (0x6A)
+#define ADDRESS (0x6B)
+#define _ADDRESS (0xD7)
 
 /* LSM6DSM registers
 http://www.st.com/content/ccc/resource/technical/document/datasheet/76/27/cf/88/c5/03/42/6b/DM00218116.pdf/files/DM00218116.pdf/jcr:content/translations/en.DM00218116.pdf

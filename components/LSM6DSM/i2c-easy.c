@@ -93,7 +93,7 @@ esp_err_t i2c_read_bytes(i2c_port_t i2c_num, uint8_t periph_address, uint8_t reg
 }
 
 esp_err_t i2c_read_byte(i2c_port_t i2c_num, uint8_t periph_address, uint8_t reg_address, uint8_t *data) {
-    return i2c_read_bytes(i2c_num, periph_address, reg_address, data, 1);
+    return i2c_read_bytes(i2c_num, periph_address, reg_address, data, 1);  // data_len = 1 byte
 }
 
 uint8_t get_bit_mask(uint8_t bit, uint8_t length) { return ((1 << length) - 1) << bit; };

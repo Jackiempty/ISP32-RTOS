@@ -59,11 +59,12 @@ Error_t lsm6dsm_init(calibration_t *cal) {
     float greses[4] = {245, 500, 1000, 2000};
     cal->_gres = greses[cal->_gscale] / 32768.f;
 
-    calibrate(cal);
-
     if (readRegister(WHO_AM_I) != 0x6A) {
+        printf("whoami error\n");
         return ERROR_ID;
     }
+
+    calibrate(cal);
 
     // reset device
     uint8_t temp = readRegister(CTRL3_C);
@@ -184,6 +185,7 @@ bool outOfBounds(float val, float minval, float maxval) {
 }
 
 void calibrate(calibration_t *cal) {
+    printf("calibrating...\n");
     int16_t temp[7] = {0, 0, 0, 0, 0, 0, 0};
     int32_t sum[7] = {0, 0, 0, 0, 0, 0, 0};
 
@@ -250,10 +252,18 @@ uint8_t readRegister(uint8_t subAddress) {
 
 void writeRegister(uint8_t subAddress, uint8_t data) {
     // cpi2c_writeRegister(_i2c, subAddress, data);
-    i2c_write_byte(I2C_MASTER_NUM, ADDRESS, subAddress, data);
+    esp_err_t err = i2c_write_byte(I2C_MASTER_NUM, ADDRESS, subAddress, data);
+    if (err != ESP_OK) {
+        printf("write_byte_err: %d\n", err);
+        while(1);
+    }
 }
 
 void readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest) {
     // cpi2c_readRegisters(_i2c, subAddress, count, dest);
-    i2c_read_bytes(I2C_MASTER_NUM, ADDRESS, subAddress, dest, count);
+    esp_err_t err = i2c_read_bytes(I2C_MASTER_NUM, ADDRESS, subAddress, dest, count);
+    if (err != ESP_OK) {
+        printf("read_bytes_err: %d\n", err);
+        while(1);
+    }
 }
