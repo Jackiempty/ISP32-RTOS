@@ -255,7 +255,7 @@ void writeRegister(uint8_t subAddress, uint8_t data) {
     esp_err_t err = i2c_write_byte(I2C_MASTER_NUM, ADDRESS, subAddress, data);
     if (err != ESP_OK) {
         printf("write_byte_err: %d\n", err);
-        while(1);
+        while (1);
     }
 }
 
@@ -264,6 +264,6 @@ void readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest) {
     esp_err_t err = i2c_read_bytes(I2C_MASTER_NUM, ADDRESS, subAddress, dest, count);
     if (err != ESP_OK) {
         printf("read_bytes_err: %d\n", err);
-        while(1);
+        while (1);
     }
 }
