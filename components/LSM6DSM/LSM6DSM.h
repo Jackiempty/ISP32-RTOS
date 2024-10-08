@@ -29,7 +29,6 @@
 #include <stdint.h>
 
 #include "bsp.h"
-#include "i2c-easy.h"
 
 // One ifdef needed to support delay() cross-platform
 #if defined(ARDUINO)
@@ -158,67 +157,67 @@ http://www.st.com/content/ccc/resource/technical/document/datasheet/76/27/cf/88/
 
 typedef enum {
 
-    // Note order!
-    AFS_2G,
-    AFS_16G,
-    AFS_4G,
-    AFS_8G
+  // Note order!
+  AFS_2G,
+  AFS_16G,
+  AFS_4G,
+  AFS_8G
 
 } Ascale_t;
 
 typedef enum {
 
-    GFS_245DPS,
-    GFS_500DPS,
-    GFS_1000DPS,
-    GFS_2000DPS
+  GFS_245DPS,
+  GFS_500DPS,
+  GFS_1000DPS,
+  GFS_2000DPS
 
 } Gscale_t;
 
 typedef enum {
 
-    ODR_12_5Hz,
-    ODR_26Hz,
-    ODR_52Hz,
-    ODR_104Hz,
-    ODR_208Hz,
-    ODR_416Hz,
-    ODR_833Hz,
-    ODR_1660Hz,
-    ODR_3330Hz,
-    ODR_6660Hz
+  ODR_12_5Hz,
+  ODR_26Hz,
+  ODR_52Hz,
+  ODR_104Hz,
+  ODR_208Hz,
+  ODR_416Hz,
+  ODR_833Hz,
+  ODR_1660Hz,
+  ODR_3330Hz,
+  ODR_6660Hz
 
 } Rate_t;
 
 typedef enum {
 
-    ERROR_NONE,
-    ERROR_CONNECT,
-    ERROR_ID,
-    ERROR_SELFTEST
+  ERROR_NONE,
+  ERROR_CONNECT,
+  ERROR_ID,
+  ERROR_SELFTEST
 
 } Error_t;
 
 typedef struct {
-    float x, y, z;
+  float x, y, z;
 } vector_t;
 
 typedef struct {
-    Ascale_t _ascale;
-    Gscale_t _gscale;
-    Rate_t _aodr;
-    Rate_t _godr;
-    float _ares;
-    float _gres;
-    float _accelBias[3];
-    float _gyroBias[3];
+  Ascale_t _ascale;
+  Gscale_t _gscale;
+  Rate_t _aodr;
+  Rate_t _godr;
+  float _ares;
+  float _gres;
+  float _accelBias[3];
+  float _gyroBias[3];
 } calibration_t;
 
 typedef struct {
-    // uint32_t freq;
-    vector_t a, g;
-    vector_t velocity;
-    float heading, pitch, roll;
+  // uint32_t freq;
+  vector_t a, g;
+  vector_t velocity;
+  float heading, pitch, roll;
 } imu_t;
 
 // Public

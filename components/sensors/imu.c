@@ -22,17 +22,17 @@ static imu_t imu_instance;
 // };
 
 void imu_init() {
-    /* Init the MPU and AHRS */
-    printf("IMU init...\n");
-    lsm6dsm_init(&cal);
-    // MadgwickAHRSinit(100, 0.8);
-    // imu_instance.freq = frequency;
-    imu_instance.velocity.x = 0;
-    imu_instance.velocity.y = 0;
-    imu_instance.velocity.z = 0;
-    imu_instance.heading = 0;
-    imu_instance.pitch = 0;
-    imu_instance.roll = 0;
+  /* Init the MPU and AHRS */
+  printf("IMU init...\n");
+  lsm6dsm_init(&cal);
+  // MadgwickAHRSinit(100, 0.8);
+  // imu_instance.freq = frequency;
+  imu_instance.velocity.x = 0;
+  imu_instance.velocity.y = 0;
+  imu_instance.velocity.z = 0;
+  imu_instance.heading = 0;
+  imu_instance.pitch = 0;
+  imu_instance.roll = 0;
 }
 
 void imu_update() { readData(&imu_instance, &cal); }
