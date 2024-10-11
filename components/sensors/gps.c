@@ -4,7 +4,10 @@
 
 static gps_t gps_instance;
 
-void gps_init() { xTaskCreate(gps_parse_task, "gps_parse_task", 8192, NULL, 12, NULL); }
+void gps_init() {
+  /* Start timer task for precise frequency */
+  xTaskCreate(gps_parse_task, "gps_parse_task", 8192, NULL, 12, NULL);
+}
 
 static inline void gps_parser(uint8_t *raw) {
   // printf("%s", raw);

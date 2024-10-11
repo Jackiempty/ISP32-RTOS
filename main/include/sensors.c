@@ -14,8 +14,6 @@ void sensors_init() {
 }
 
 void sensors_task(void* arg) {
-  bmp280_update();
-  imu_update();
   printf("bmp280_altitude: %f\n", pressure_altitude_instance->relative_altitude);
   printf("bmp280_velocity: %f\n", pressure_altitude_instance->velocity);
   printf("gps_longitude: %ld\n", gps_instance->longitude);
@@ -24,4 +22,5 @@ void sensors_task(void* arg) {
   printf("imu_accel: x: %f, y: %f, z: %f\n", imu_instance->a.x, imu_instance->a.y, imu_instance->a.z);
   printf("imu_gyro: x: %f, y: %f, z: %f\n", imu_instance->g.x, imu_instance->g.y, imu_instance->g.z);
   printf("----------------------------------------------\n");
+  vTaskDelay(pdMS_TO_TICKS(500));
 }

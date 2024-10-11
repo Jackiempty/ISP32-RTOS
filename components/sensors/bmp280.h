@@ -9,6 +9,9 @@
 #ifndef __BMP_H__
 #define __BMP_H__
 
+#include <esp_log.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #include <math.h>
 #include <stdint.h>
 

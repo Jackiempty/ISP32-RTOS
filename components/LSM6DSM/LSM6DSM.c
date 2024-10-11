@@ -18,6 +18,9 @@
    GNU General Public License for more details.
    You should have received a copy of the GNU General Public License
    along with LSM6DSM.  If not, see <http://www.gnu.org/licenses/>.
+
+   from https://github.com/simondlevy/LSM6DSM/blob/master/src/LSM6DSM.h
+   Modified by Jackiempty
  */
 
 #include "LSM6DSM.h"

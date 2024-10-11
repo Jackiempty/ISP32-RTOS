@@ -39,6 +39,9 @@ void bmp280_init() {
 
   bmp280_update();
   pressure_sensor_instance.init_altitude = pressure_sensor_instance.altitude;
+
+  /* Start timer task for precise frequency */
+  xTimerStart(xTimerCreate("bmp280_update", pdMS_TO_TICKS(10), pdTRUE, (void*)0, bmp280_update), 0);
 }
 
 void bmp280_read_raw(int32_t* temp, int32_t* pressure) {
