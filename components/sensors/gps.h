@@ -9,6 +9,11 @@
 
 #include "bsp.h"
 
+/*
+GPS UART decoding format reference site:
+https://docs.novatel.com/OEM7/Content/Logs/Core_Logs.htm?tocpath=Commands%20%26%20Logs%7CLogs%7CGNSS%20Logs%7C_____0
+*/
+
 #define CHAR2INT(x) ((x) - '0')
 
 typedef struct {
