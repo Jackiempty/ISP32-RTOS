@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "include/sensors.h"
+#include "include/storage.h"
 
 void app_main() {
   gpio_init();
@@ -16,5 +17,6 @@ void app_main() {
   sensors_init();
 
   // xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
-  xTaskCreate(sensors_task, "sensors_print", 2048, NULL, 4, NULL);
+  // xTaskCreate(sensors_task, "sensors_print", 2048, NULL, 4, NULL);
+  xTaskCreate(storage_task, "storage_task", 4096, NULL, 4, NULL);
 }
