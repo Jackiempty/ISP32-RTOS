@@ -1,14 +1,17 @@
 #include "storage.h"
 
+#define TAG "STOR"
+static FILE *f;
+
 static esp_err_t s_example_write_file(const char *path, char *data) {
   ESP_LOGI(TAG, "Opening file %s", path);
-  FILE *f = fopen(path, "w");
-  if (f == NULL) {
+  FILE *_f = fopen(path, "w");
+  if (_f == NULL) {
     ESP_LOGE(TAG, "Failed to open file for writing");
     return ESP_FAIL;
   }
-  fprintf(f, data);
-  fclose(f);
+  fprintf(_f, data);
+  fclose(_f);
   ESP_LOGI(TAG, "File written");
 
   return ESP_OK;
@@ -16,14 +19,14 @@ static esp_err_t s_example_write_file(const char *path, char *data) {
 
 static esp_err_t s_example_read_file(const char *path) {
   ESP_LOGI(TAG, "Reading file %s", path);
-  FILE *f = fopen(path, "r");
-  if (f == NULL) {
+  FILE *_f = fopen(path, "r");
+  if (_f == NULL) {
     ESP_LOGE(TAG, "Failed to open file for reading");
     return ESP_FAIL;
   }
   char line[EXAMPLE_MAX_CHAR_SIZE];
-  fgets(line, sizeof(line), f);
-  fclose(f);
+  fgets(line, sizeof(line), _f);
+  fclose(_f);
 
   // strip newline
   char *pos = strchr(line, '\n');
@@ -35,7 +38,48 @@ static esp_err_t s_example_read_file(const char *path) {
   return ESP_OK;
 }
 
-void storage_task(void) {
+void storage_init(char *_fn) {
+  ESP_LOGI(TAG, "Init storage");
+  char fn[32] = SD_MOUNT "/" STOR_PREFIX "0000.txt";
+  f = NULL;
+  if (_fn == NULL) {
+    uint16_t i = 0;
+    struct stat st;
+    while (stat(fn, &st) == 0) sprintf(fn, SD_MOUNT "/" STOR_PREFIX "%04d.txt", ++i);
+    f = fopen(fn, "a+");
+  } else {
+    f = fopen(_fn, "a+");
+  }
+  if (f == NULL) esp_restart();
+  printf("Open %s %d\n", fn, fileno(f));
+}
+
+void storage_write(char *data) {
+  fprintf(f, data);
+  return;
+}
+
+void storage_read() {
+  char line[EXAMPLE_MAX_CHAR_SIZE];
+  fgets(line, sizeof(line), f);
+
+  // strip newline
+  char *pos = strchr(line, '\n');
+  if (pos) {
+    *pos = '\0';
+  }
+  return;
+}
+
+void storage_flush() {
+  if (f == NULL) return;
+  fflush(f);
+  fsync(fileno(f));
+}
+
+FILE *storage_fetch() { return f; }
+
+void storage_demo(void) {
   esp_err_t ret;
 
   ESP_LOGI(TAG, "Filesystem mounted");
@@ -46,7 +90,6 @@ void storage_task(void) {
   char data[EXAMPLE_MAX_CHAR_SIZE];
   strcpy(data, source);
   // snprintf(data, EXAMPLE_MAX_CHAR_SIZE, "%s %s!\n", "Hello", card->cid.name);
-  printf("%s", data);
   ret = s_example_write_file(file_hello, data);
   if (ret != ESP_OK) {
     return;
@@ -77,7 +120,6 @@ void storage_task(void) {
   memset(data, 0, EXAMPLE_MAX_CHAR_SIZE);
   // snprintf(data, EXAMPLE_MAX_CHAR_SIZE, "%s %s!\n", "Nihao", card->cid.name);
   source = "Nihou";
-  printf("%s", data);
   ret = s_example_write_file(file_nihao, source);
   if (ret != ESP_OK) {
     return;

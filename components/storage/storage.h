@@ -12,8 +12,6 @@
 #define __SOTRAGE_T__
 
 // #include <driver/spi_master.h>
-#include <esp_vfs_fat.h>
-#include <sdmmc_cmd.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/unistd.h>
@@ -22,11 +20,13 @@
 #include "bsp.h"
 
 #define EXAMPLE_MAX_CHAR_SIZE 64
+#define STOR_PREFIX "FT_"
 
-static const char *TAG = "example";
-
-#define MOUNT_POINT "/sdcard"
-
-void storage_task(void);
+void storage_init(char *);
+void storage_write(char *);
+void storage_read(void);
+void storage_flush();
+FILE *storage_fetch();
+void storage_demo(void);
 
 #endif
