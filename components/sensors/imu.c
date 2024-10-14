@@ -35,7 +35,7 @@ void imu_init() {
   imu_instance.roll = 0;
 
   /* Start timer task for precise frequency */
-  // xTimerStart(xTimerCreate("imu_update", pdMS_TO_TICKS(500), pdTRUE, (void *)0, imu_update), 0);
+  xTimerStart(xTimerCreate("imu_update", pdMS_TO_TICKS(500), pdTRUE, (void *)0, imu_update), 0);
 }
 
 void imu_update() { readData(&imu_instance, &cal); }

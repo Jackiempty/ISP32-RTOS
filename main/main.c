@@ -32,6 +32,6 @@ void app_main() {
   storage_init(NULL);
   esp_log_set_vprintf(log_vprintf);
   // xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
-  xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
-  // xTaskCreate(sensors_task, "sensors_task", 32768, NULL, 4, NULL);
+  // xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
+  xTaskCreate(sensors_task, "sensors_task", 32768, NULL, 4, NULL);
 }
