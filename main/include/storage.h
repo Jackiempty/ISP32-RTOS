@@ -11,7 +11,7 @@
 #ifndef __STORAGE_T__
 #define __SOTRAGE_T__
 
-#include <driver/spi_master.h>
+// #include <driver/spi_master.h>
 #include <esp_vfs_fat.h>
 #include <sdmmc_cmd.h>
 #include <string.h>
