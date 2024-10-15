@@ -50,21 +50,17 @@ static inline void gps_parser(uint8_t *raw) {
 
     /* latitude: Parsed string to minutes format */
     if (parsed.field[2][0] != 0) {
-      gps_instance.latitude = (CHAR2INT(parsed.field[2][0]) * 10 + CHAR2INT(parsed.field[2][1])) * 600000 +
-                              CHAR2INT(parsed.field[2][2]) * 100000 + CHAR2INT(parsed.field[2][3]) * 10000 +
-                              CHAR2INT(parsed.field[2][5]) * 1000 + CHAR2INT(parsed.field[2][6]) * 100 +
+      gps_instance.latitude = (CHAR2INT(parsed.field[2][0]) * 10 + CHAR2INT(parsed.field[2][1])) * 600000 + CHAR2INT(parsed.field[2][2]) * 100000 +
+                              CHAR2INT(parsed.field[2][3]) * 10000 + CHAR2INT(parsed.field[2][5]) * 1000 + CHAR2INT(parsed.field[2][6]) * 100 +
                               CHAR2INT(parsed.field[2][7]) * 10 + CHAR2INT(parsed.field[2][8]);
       gps_instance.latitude *= parsed.field[3][0] == 'N' ? 1 : -1;
     }
 
     /* longitude: Parsed string to minutes format */
     if (parsed.field[4][0] != 0) {
-      gps_instance.longitude =
-          (CHAR2INT(parsed.field[4][0]) * 100 + CHAR2INT(parsed.field[4][1]) * 10 + CHAR2INT(parsed.field[4][2])) *
-              600000 +
-          CHAR2INT(parsed.field[4][3]) * 100000 + CHAR2INT(parsed.field[4][4]) * 10000 +
-          CHAR2INT(parsed.field[4][6]) * 1000 + CHAR2INT(parsed.field[4][7]) * 100 + CHAR2INT(parsed.field[4][8]) * 10 +
-          CHAR2INT(parsed.field[4][9]);
+      gps_instance.longitude = (CHAR2INT(parsed.field[4][0]) * 100 + CHAR2INT(parsed.field[4][1]) * 10 + CHAR2INT(parsed.field[4][2])) * 600000 +
+                               CHAR2INT(parsed.field[4][3]) * 100000 + CHAR2INT(parsed.field[4][4]) * 10000 + CHAR2INT(parsed.field[4][6]) * 1000 +
+                               CHAR2INT(parsed.field[4][7]) * 100 + CHAR2INT(parsed.field[4][8]) * 10 + CHAR2INT(parsed.field[4][9]);
       gps_instance.longitude *= parsed.field[5][0] == 'E' ? 1 : -1;
     }
 

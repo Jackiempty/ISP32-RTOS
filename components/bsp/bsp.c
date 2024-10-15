@@ -54,8 +54,7 @@ void uart_init() {
   if (uart_driver_install(GPS_UART_NUM, 256, 0, 20, &uart_queue, 0) != ESP_OK) printf("UART install failed\n");
   if (uart_param_config(GPS_UART_NUM, &uart_config) != ESP_OK) printf("UART param failed\n");
   if (uart_set_pin(GPS_UART_NUM, 18, 17, -1, -1) != ESP_OK) printf("UART set pin failed\n");
-  if (uart_enable_pattern_det_baud_intr(GPS_UART_NUM, '\n', 1, 9, 0, 0) != ESP_OK)
-    printf("UART enable interrupt failed\n");
+  if (uart_enable_pattern_det_baud_intr(GPS_UART_NUM, '\n', 1, 9, 0, 0) != ESP_OK) printf("UART enable interrupt failed\n");
   if (uart_pattern_queue_reset(GPS_UART_NUM, 20) != ESP_OK) printf("UART pattern failed\n");
   uart_flush(GPS_UART_NUM);
   printf("GPS init...\n");

@@ -28,9 +28,8 @@ void sensors_task() {
     printf("imu_accel: x: %f, y: %f, z: %f\n", imu_instance->a.x, imu_instance->a.y, imu_instance->a.z);
     printf("imu_gyro: x: %f, y: %f, z: %f\n", imu_instance->g.x, imu_instance->g.y, imu_instance->g.z);
     printf("----------------------------------------------\n");
-    ESP_LOGI(TAG, "%lu, %f, %f, %ld, %ld, %f, %f, %f, %f, %f, %f, %f\n", systick,
-             pressure_altitude_instance->relative_altitude, pressure_altitude_instance->velocity,
-             gps_instance->longitude, gps_instance->latitude, gps_instance->altitude, imu_instance->a.x,
+    ESP_LOGI(TAG, "%lu, %f, %f, %ld, %ld, %f, %f, %f, %f, %f, %f, %f\n", systick, pressure_altitude_instance->relative_altitude,
+             pressure_altitude_instance->velocity, gps_instance->longitude, gps_instance->latitude, gps_instance->altitude, imu_instance->a.x,
              imu_instance->a.y, imu_instance->a.z, imu_instance->g.x, imu_instance->g.y, imu_instance->g.z);
 
     vTaskDelay(pdMS_TO_TICKS(500));
