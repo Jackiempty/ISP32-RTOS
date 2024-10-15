@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "bmp280.h"
+#include "comm.h"
 #include "gps.h"
 #include "imu.h"
 #include "storage.h"

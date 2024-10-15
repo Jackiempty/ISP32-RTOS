@@ -5,6 +5,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#include "include/comm.h"
 #include "include/sensors.h"
 
 static int log_vprintf(const char *fmt, va_list arguments) {
@@ -35,9 +36,8 @@ void app_main() {
     storage_init(NULL);
     esp_log_set_vprintf(log_vprintf);
     vTaskDelay(pdMS_TO_TICKS(1000));
-    xTaskCreate(sensors_task, "sensors_task", 32768, NULL, 4, NULL);
-    // xTaskCreatePinnedToCore(sensors_task, "sensors_task", 8192, NULL, 4, NULL, 1);
-    // xTaskCreatePinnedToCore(logger_task, "logger_task", 4096, NULL, 3, NULL, 0);
+    xTaskCreate(sensors_task, "sensors_task", 8192, NULL, 4, NULL);
+    xTaskCreate(comm_task, "comm_task", 4096, NULL, 3, NULL);
     // xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
   } else {
     printf("I am a ground receiver board!\n");
