@@ -102,14 +102,12 @@ void readData(imu_t *imu_instance, calibration_t *cal) {
   _readData(data);
 
   // Calculate the accleration value into actual g's
-  imu_instance->a.x =
-      (float)data[4] * cal->_ares - cal->_accelBias[0];  // get actual g value, this depends on scale being set
+  imu_instance->a.x = (float)data[4] * cal->_ares - cal->_accelBias[0];  // get actual g value, this depends on scale being set
   imu_instance->a.y = (float)data[5] * cal->_ares - cal->_accelBias[1];
   imu_instance->a.z = (float)data[6] * cal->_ares - cal->_accelBias[2];
 
   // Calculate the gyro value into actual degrees per second
-  imu_instance->g.x =
-      (float)data[1] * cal->_gres - cal->_gyroBias[0];  // get actual gyro value, this depends on scale being set
+  imu_instance->g.x = (float)data[1] * cal->_gres - cal->_gyroBias[0];  // get actual gyro value, this depends on scale being set
   imu_instance->g.y = (float)data[2] * cal->_gres - cal->_gyroBias[1];
   imu_instance->g.z = (float)data[3] * cal->_gres - cal->_gyroBias[2];
 }
@@ -173,8 +171,7 @@ bool selfTest(calibration_t *cal) {
 
 bool inBounds(int16_t ptest[3], int16_t ntest[3], int16_t nom[3], float res, float minval, float maxval) {
   for (uint8_t k = 0; k < 3; ++k) {
-    if (outOfBounds((ptest[k] - nom[k]) * res, minval, maxval) ||
-        outOfBounds((ntest[k] - nom[k]) * res, minval, maxval)) {
+    if (outOfBounds((ptest[k] - nom[k]) * res, minval, maxval) || outOfBounds((ntest[k] - nom[k]) * res, minval, maxval)) {
       return false;
     }
   }
@@ -258,8 +255,7 @@ void writeRegister(uint8_t subAddress, uint8_t data) {
   uint8_t buf[2];
   buf[0] = subAddress;
   buf[1] = data;
-  esp_err_t err =
-      i2c_master_write_to_device(I2C_MASTER_NUM, ADDRESS, &buf, 2, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
+  esp_err_t err = i2c_master_write_to_device(I2C_MASTER_NUM, ADDRESS, &buf, 2, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
   // esp_err_t err = i2c_write_byte(I2C_MASTER_NUM, ADDRESS, subAddress, data);
   if (err != ESP_OK) {
     printf("write_byte_err: %d\n", err);
@@ -270,8 +266,7 @@ void writeRegister(uint8_t subAddress, uint8_t data) {
 void readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest) {
   // cpi2c_readRegisters(_i2c, subAddress, count, dest);
   uint8_t reg = subAddress;
-  esp_err_t err = i2c_master_write_read_device(I2C_MASTER_NUM, ADDRESS, &reg, 1, dest, count,
-                                               I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
+  esp_err_t err = i2c_master_write_read_device(I2C_MASTER_NUM, ADDRESS, &reg, 1, dest, count, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
   // esp_err_t err = i2c_read_bytes(I2C_MASTER_NUM, ADDRESS, subAddress, dest, count);
   if (err != ESP_OK) {
     printf("read_bytes_err: %d\n", err);
