@@ -26,12 +26,24 @@ void app_main() {
   uart_init();
   spi_init(LORA_SPI_HOST, CONFIG_LORA_MOSI_GPIO, CONFIG_LORA_MISO_GPIO, CONFIG_LORA_SCK_GPIO);
   spi_init(SD_SPI_HOST, CONFIG_SD_MOSI_GPIO, CONFIG_SD_MISO_GPIO, CONFIG_SD_SCK_GPIO);
-  sd_init();
   sensors_init();
 
-  storage_init(NULL);
-  esp_log_set_vprintf(log_vprintf);
   // xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
   // xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
-  xTaskCreate(sensors_task, "sensors_task", 32768, NULL, 4, NULL);
+  if (sd_init() == ESP_OK) {
+    printf("I am an on-board avionics board!\n");
+    storage_init(NULL);
+    esp_log_set_vprintf(log_vprintf);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    xTaskCreate(sensors_task, "sensors_task", 32768, NULL, 4, NULL);
+    // xTaskCreatePinnedToCore(sensors_task, "sensors_task", 8192, NULL, 4, NULL, 1);
+    // xTaskCreatePinnedToCore(logger_task, "logger_task", 4096, NULL, 3, NULL, 0);
+    // xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
+  } else {
+    printf("I am a ground receiver board!\n");
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    // xTaskCreatePinnedToCore(recv_task, "recv_task", 8192, NULL, 5, NULL, 1);
+  }
+
+  printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 }
