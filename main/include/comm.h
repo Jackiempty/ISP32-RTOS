@@ -5,6 +5,8 @@
 #include <stdint.h>
 
 #include "bsp.h"
+
+/* Waited to be replaced */
 #include "ra01s.h"
 
 void comm_task(void*);
