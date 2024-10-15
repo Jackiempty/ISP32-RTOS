@@ -39,7 +39,7 @@ void bmp280_init() {
   pressure_sensor_instance.init_altitude = pressure_sensor_instance.altitude;
 
   /* Start timer task for precise frequency */
-  xTimerStart(xTimerCreate("bmp280_update", pdMS_TO_TICKS(500), pdTRUE, (void*)0, bmp280_update), 0);
+  xTimerStart(xTimerCreate("bmp280_update", pdMS_TO_TICKS(10), pdTRUE, (void*)0, bmp280_update), 0);
 }
 
 void bmp280_read_raw(int32_t* temp, int32_t* pressure) {
@@ -49,7 +49,8 @@ void bmp280_read_raw(int32_t* temp, int32_t* pressure) {
 
   uint8_t buf[6];
   uint8_t reg = REG_PRESSURE_MSB;
-  esp_err_t err = i2c_master_write_read_device(I2C_MASTER_NUM, BMP280_SENSOR_ADDRESS, &reg, 1, buf, 6, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
+  esp_err_t err =
+      i2c_master_write_read_device(I2C_MASTER_NUM, BMP280_SENSOR_ADDRESS, &reg, 1, buf, 6, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
 
   // store the 20 bit read in a 32 bit signed integer for conversion
   *pressure = (buf[0] << 12) | (buf[1] << 4) | (buf[2] >> 4);
@@ -70,7 +71,8 @@ int32_t bmp280_convert(int32_t temp, struct bmp280_calib_param* params) {
 
   int32_t var1, var2;
   var1 = ((((temp >> 3) - ((int32_t)params->dig_t1 << 1))) * ((int32_t)params->dig_t2)) >> 11;
-  var2 = (((((temp >> 4) - ((int32_t)params->dig_t1)) * ((temp >> 4) - ((int32_t)params->dig_t1))) >> 12) * ((int32_t)params->dig_t3)) >> 14;
+  var2 =
+      (((((temp >> 4) - ((int32_t)params->dig_t1)) * ((temp >> 4) - ((int32_t)params->dig_t1))) >> 12) * ((int32_t)params->dig_t3)) >> 14;
   return var1 + var2;
 }
 
@@ -116,7 +118,8 @@ void bmp280_get_calib_params(struct bmp280_calib_param* params) {
 
   uint8_t buf[NUM_CALIB_PARAMS] = {0};
   uint8_t reg = REG_DIG_T1_LSB;
-  i2c_master_write_read_device(I2C_MASTER_NUM, BMP280_SENSOR_ADDRESS, &reg, 1, buf, NUM_CALIB_PARAMS, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
+  i2c_master_write_read_device(I2C_MASTER_NUM, BMP280_SENSOR_ADDRESS, &reg, 1, buf, NUM_CALIB_PARAMS,
+                               I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
 
   // store these in a struct for later use
   params->dig_t1 = (uint16_t)(buf[1] << 8) | buf[0];

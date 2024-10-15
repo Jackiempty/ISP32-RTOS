@@ -7,7 +7,10 @@
 #include <math.h>
 
 #include "LSM6DSM.h"
+#include "MadgwickAHRS.h"
 #include "esp_system.h"
+
+#define DEG2RAD(deg) (deg * M_PI / 180.0f)
 
 void imu_init();
 void imu_update();

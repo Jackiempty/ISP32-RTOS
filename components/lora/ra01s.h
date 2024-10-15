@@ -304,29 +304,29 @@
 #define SX126X_LORA_LOW_DATA_RATE_OPTIMIZE_ON 0x01   //  7     0                                      enabled
 
 // SX126X_CMD_SET_PACKET_PARAMS
-#define SX126X_GFSK_PREAMBLE_DETECT_OFF 0x00          //  7     0     GFSK minimum preamble length before reception starts: detector disabled
-#define SX126X_GFSK_PREAMBLE_DETECT_8 0x04            //  7     0                                                           8 bits
-#define SX126X_GFSK_PREAMBLE_DETECT_16 0x05           //  7     0                                                           16 bits
-#define SX126X_GFSK_PREAMBLE_DETECT_24 0x06           //  7     0                                                           24 bits
-#define SX126X_GFSK_PREAMBLE_DETECT_32 0x07           //  7     0                                                           32 bits
-#define SX126X_GFSK_ADDRESS_FILT_OFF 0x00             //  7     0     GFSK address filtering: disabled
-#define SX126X_GFSK_ADDRESS_FILT_NODE 0x01            //  7     0                             node only
+#define SX126X_GFSK_PREAMBLE_DETECT_OFF 0x00  //  7     0     GFSK minimum preamble length before reception starts: detector disabled
+#define SX126X_GFSK_PREAMBLE_DETECT_8 0x04    //  7     0                                                           8 bits
+#define SX126X_GFSK_PREAMBLE_DETECT_16 0x05   //  7     0                                                           16 bits
+#define SX126X_GFSK_PREAMBLE_DETECT_24 0x06   //  7     0                                                           24 bits
+#define SX126X_GFSK_PREAMBLE_DETECT_32 0x07   //  7     0                                                           32 bits
+#define SX126X_GFSK_ADDRESS_FILT_OFF 0x00     //  7     0     GFSK address filtering: disabled
+#define SX126X_GFSK_ADDRESS_FILT_NODE 0x01    //  7     0                             node only
 #define SX126X_GFSK_ADDRESS_FILT_NODE_BROADCAST 0x02  //  7     0                             node and broadcast
-#define SX126X_GFSK_PACKET_FIXED 0x00                 //  7     0     GFSK packet type: fixed (payload length known in advance to both sides)
-#define SX126X_GFSK_PACKET_VARIABLE 0x01              //  7     0                       variable (payload length added to packet)
-#define SX126X_GFSK_CRC_OFF 0x01                      //  7     0     GFSK packet CRC: disabled
-#define SX126X_GFSK_CRC_1_BYTE 0x00                   //  7     0                      1 byte
-#define SX126X_GFSK_CRC_2_BYTE 0x02                   //  7     0                      2 byte
-#define SX126X_GFSK_CRC_1_BYTE_INV 0x04               //  7     0                      1 byte, inverted
-#define SX126X_GFSK_CRC_2_BYTE_INV 0x06               //  7     0                      2 byte, inverted
-#define SX126X_GFSK_WHITENING_OFF 0x00                //  7     0     GFSK data whitening: disabled
-#define SX126X_GFSK_WHITENING_ON 0x01                 //  7     0                          enabled
-#define SX126X_LORA_HEADER_EXPLICIT 0x00              //  7     0     LoRa header mode: explicit
-#define SX126X_LORA_HEADER_IMPLICIT 0x01              //  7     0                       implicit
-#define SX126X_LORA_CRC_OFF 0x00                      //  7     0     LoRa CRC mode: disabled
-#define SX126X_LORA_CRC_ON 0x01                       //  7     0                    enabled
-#define SX126X_LORA_IQ_STANDARD 0x00                  //  7     0     LoRa IQ setup: standard
-#define SX126X_LORA_IQ_INVERTED 0x01                  //  7     0                    inverted
+#define SX126X_GFSK_PACKET_FIXED 0x00     //  7     0     GFSK packet type: fixed (payload length known in advance to both sides)
+#define SX126X_GFSK_PACKET_VARIABLE 0x01  //  7     0                       variable (payload length added to packet)
+#define SX126X_GFSK_CRC_OFF 0x01          //  7     0     GFSK packet CRC: disabled
+#define SX126X_GFSK_CRC_1_BYTE 0x00       //  7     0                      1 byte
+#define SX126X_GFSK_CRC_2_BYTE 0x02       //  7     0                      2 byte
+#define SX126X_GFSK_CRC_1_BYTE_INV 0x04   //  7     0                      1 byte, inverted
+#define SX126X_GFSK_CRC_2_BYTE_INV 0x06   //  7     0                      2 byte, inverted
+#define SX126X_GFSK_WHITENING_OFF 0x00    //  7     0     GFSK data whitening: disabled
+#define SX126X_GFSK_WHITENING_ON 0x01     //  7     0                          enabled
+#define SX126X_LORA_HEADER_EXPLICIT 0x00  //  7     0     LoRa header mode: explicit
+#define SX126X_LORA_HEADER_IMPLICIT 0x01  //  7     0                       implicit
+#define SX126X_LORA_CRC_OFF 0x00          //  7     0     LoRa CRC mode: disabled
+#define SX126X_LORA_CRC_ON 0x01           //  7     0                    enabled
+#define SX126X_LORA_IQ_STANDARD 0x00      //  7     0     LoRa IQ setup: standard
+#define SX126X_LORA_IQ_INVERTED 0x01      //  7     0                    inverted
 
 // SX126X_CMD_SET_CAD_PARAMS
 #define SX126X_CAD_ON_1_SYMB 0x00   //  7     0     number of symbols used for CAD: 1

@@ -214,7 +214,7 @@ typedef struct {
 } calibration_t;
 
 typedef struct {
-  // uint32_t freq;
+  uint32_t freq;
   vector_t a, g;
   vector_t velocity;
   float heading, pitch, roll;
