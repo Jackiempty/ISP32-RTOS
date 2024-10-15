@@ -10,7 +10,7 @@ void sensors_init() {
   pressure_altitude_instance = bmp_fetch();
   gps_instance = gps_fetch();
   imu_instance = imu_fetch();
-  // All sensors' update tasks are done in each init()
+  // All sensors' update tasks are created in each init()
   bmp280_init();
   imu_init();
   gps_init();
