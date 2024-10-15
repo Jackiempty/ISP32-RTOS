@@ -9,10 +9,11 @@
 #include "bmp280.h"
 #include "gps.h"
 #include "imu.h"
+#include "storage.h"
 
 #define sensor_freq 100
 
 void sensors_init();
-void sensors_task(void *);
+void sensors_task();
 
 #endif

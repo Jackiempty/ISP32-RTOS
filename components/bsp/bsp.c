@@ -71,6 +71,10 @@ void spi_init(spi_host_device_t device, uint32_t mosi, uint32_t miso, uint32_t s
       .quadhd_io_num = -1,
   };
   ret = spi_bus_initialize(device, &spi_bus_config, SPI_DMA_CH_AUTO);
+  if (ret != ESP_OK) {
+    ESP_LOGE(TAG, "Failed to initialize bus.");
+    return;
+  }
   ESP_LOGI(TAG, "SPI%d_HOST spi_bus_initialize=%d", device + 1, ret);
 }
 
