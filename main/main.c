@@ -7,6 +7,8 @@
 
 #include "include/comm.h"
 #include "include/sensors.h"
+#include "include/fsm.h"
+#include "include/recv.h"
 
 static int log_vprintf(const char *fmt, va_list arguments) {
   static FILE *f = NULL;
@@ -30,7 +32,9 @@ void app_main() {
   sensors_init();
   lora_init();
 
+  // example of task creation:
   // xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
+  // xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
   // xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
   if (sd_init() == ESP_OK) {
     printf("I am an on-board avionics board!\n");
@@ -39,11 +43,10 @@ void app_main() {
     vTaskDelay(pdMS_TO_TICKS(1000));
     xTaskCreate(sensors_task, "sensors_task", 8192, NULL, 4, NULL);
     xTaskCreate(comm_task, "comm_task", 4096, NULL, 3, NULL);
-    // xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
   } else {
     printf("I am a ground receiver board!\n");
     vTaskDelay(pdMS_TO_TICKS(1000));
-    // xTaskCreatePinnedToCore(recv_task, "recv_task", 8192, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(recv_task, "recv_task", 8192, NULL, 5, NULL, 1);
   }
 
   printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
