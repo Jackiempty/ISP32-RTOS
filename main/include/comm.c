@@ -10,8 +10,8 @@ void comm_task(void* args) {
   while (1) {
     gpio_set_level(CONFIG_INDI_LED, led_state);
     led_state = !led_state;
-    /* LoRaSend() is going to be replaced by new library */
-    LoRaSend(commu_buffer, comm_len(), SX126x_TXMODE_SYNC);
+    // New LoRa transmit() function
+    transmit(commu_buffer, comm_len());
     vTaskDelay(pdMS_TO_TICKS(500));
   }
 }

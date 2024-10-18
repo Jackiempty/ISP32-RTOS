@@ -7,7 +7,7 @@
 #include "bsp.h"
 
 /* Waited to be replaced */
-#include "ra01s.h"
+#include "LoraSx1262.h"
 
 void comm_task(void*);
 uint8_t* comm_fetch();
