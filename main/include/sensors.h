@@ -17,5 +17,6 @@
 
 void sensors_init();
 void sensors_task();
+void sensors_print();
 
 #endif
