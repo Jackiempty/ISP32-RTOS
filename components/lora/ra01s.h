@@ -1,6 +1,11 @@
 #ifndef _RA01S_H
 #define _RA01S_H
 
+/*
+  source: https://github.com/nopnop2002/Arduino-LoRa-Ra01S/tree/main
+  modified by willic
+*/
+
 #include <driver/gpio.h>
 #include <driver/spi_master.h>
 #include <esp_log.h>

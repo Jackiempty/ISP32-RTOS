@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2021 Raspberry Pi (Trading) Ltd.
  * from
- *https://github.com/raspberrypi/pico-examples/blob/master/i2c/bmp280_i2c/bmp280_i2c.c
+ * https://github.com/raspberrypi/pico-examples/blob/master/i2c/bmp280_i2c/bmp280_i2c.c
  * SPDX-License-Identifier: BSD-3-Clause
  * Modify By @wilicw
  **/
