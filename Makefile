@@ -1,7 +1,8 @@
 SoC=esp32s3
 SERIAL_PORT=$(shell ls -d /dev/* | grep usbmodem | head -n1)
+GIT_HOOKS := .git/hooks/applied
 
-.PHONY: all build post_build clean flash serial update format
+.PHONY: all build post_build clean flash serial update format hook
 
 all: build post_build flash
 
@@ -24,6 +25,13 @@ flash:
 
 format:
 	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i
+
+hook: $(GIT_HOOKS)
+
+$(GIT_HOOKS):
+	chmod +x scripts/install-git-hooks
+	@scripts/install-git-hooks
+	@echo
 
 clean:
 	rm -rf build/
