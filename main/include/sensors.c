@@ -9,7 +9,7 @@ static fsm_state_e* state;
 
 #define TAG "sensors"
 
-static void comm_dump();
+static inline void comm_dump();
 
 void sensors_init() {
   comm_buffer = comm_fetch();
