@@ -39,6 +39,9 @@ void sensors_task() {
 static void comm_dump() {
   uint8_t* logger_ptr = comm_buffer;
 
+  memcpy(logger_ptr, &state, sizeof(fsm_state_e));
+  logger_ptr += sizeof(fsm_state_e);
+  
   memcpy(logger_ptr, &systick, sizeof(systick));
   logger_ptr += sizeof(systick);
 

@@ -11,7 +11,7 @@ void comm_task(void* args) {
     gpio_set_level(CONFIG_INDI_LED, led_state);
     led_state = !led_state;
     LoRaSend(commu_buffer, comm_len(), SX126x_TXMODE_SYNC);
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(300));
   }
 }
 
