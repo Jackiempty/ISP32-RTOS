@@ -24,6 +24,7 @@ void recv_task(void* args) {
   int32_t longitude;
   float gps_altitude;
   float heading, pitch, roll;
+  int8_t rssi;
 
   for (;;) {
     if ((len = LoRaReceive(&data[0], RECV_LEN)) > 0) {
@@ -86,6 +87,7 @@ void recv_task(void* args) {
         gpio_set_level(CONFIG_INDI_LED, led_status);
         led_status = !led_status;
       }
+      rssi = GetRssiInst();
     }
   }
 }
