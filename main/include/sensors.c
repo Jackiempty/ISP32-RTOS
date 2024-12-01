@@ -32,7 +32,7 @@ void sensors_task() {
              imu_instance->a.x, imu_instance->a.y, imu_instance->a.z, imu_instance->g.x, imu_instance->g.y, imu_instance->g.z,
              imu_instance->roll, imu_instance->pitch, imu_instance->heading);
 
-    vTaskDelay(pdMS_TO_TICKS(250));
+    vTaskDelay(pdMS_TO_TICKS(100));
   }
 }
 

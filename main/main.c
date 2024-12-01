@@ -41,7 +41,7 @@ void app_main() {
     storage_init(NULL);
     esp_log_set_vprintf(log_vprintf);
     vTaskDelay(pdMS_TO_TICKS(1000));
-    xTaskCreatePinnedToCore(sensors_task, "sensors_task", 8192, NULL, 4, NULL, 1);
+    xTaskCreatePinnedToCore(sensors_task, "sensors_task", 8192, NULL, 6, NULL, 1);
     xTaskCreatePinnedToCore(fsm_task, "fsm_task", 4096, NULL, 5, NULL, 1);
     xTaskCreatePinnedToCore(comm_task, "comm_task", 4096, NULL, 3, NULL, 0);
     xTaskCreatePinnedToCore(sensors_print, "sensors_print", 2048, NULL, 2, NULL, 0);

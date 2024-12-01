@@ -42,6 +42,12 @@ void recv_task(void* args) {
       memcpy(&pressure_velocity, logger_ptr, sizeof(pressure_velocity));
       logger_ptr += sizeof(pressure_velocity);
 
+      memcpy(&acceleration, logger_ptr, sizeof(acceleration));
+      logger_ptr += sizeof(acceleration);
+
+      memcpy(&gyro, logger_ptr, sizeof(gyro));
+      logger_ptr += sizeof(gyro);
+
       memcpy(&longitude, logger_ptr, sizeof(longitude));
       logger_ptr += sizeof(longitude);
 
@@ -50,12 +56,6 @@ void recv_task(void* args) {
 
       memcpy(&gps_altitude, logger_ptr, sizeof(gps_altitude));
       logger_ptr += sizeof(gps_altitude);
-
-      memcpy(&acceleration, logger_ptr, sizeof(acceleration));
-      logger_ptr += sizeof(acceleration);
-
-      memcpy(&gyro, logger_ptr, sizeof(gyro));
-      logger_ptr += sizeof(gyro);
 
       memcpy(&roll, logger_ptr, sizeof(roll));
       logger_ptr += sizeof(roll);
@@ -75,19 +75,31 @@ void recv_task(void* args) {
       memcpy(&tx_ecc, logger_ptr, sizeof(tx_ecc));
       logger_ptr += sizeof(tx_ecc);
 
+      rssi = GetRssiInst();
       if (tx_ecc == ecc) {
-        printf(">>>%u, %lu, %f, %f, %ld, %ld, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n<<<\n",
-               state, systick, pressure_altitude,
-               pressure_velocity,
-               longitude, latitude, gps_altitude,
-               acceleration.x, acceleration.y, acceleration.z,
-               gyro.x, gyro.y, gyro.z,
-               roll, pitch, heading);
+        // printf(">>>%u, %lu, %f, %f, %ld, %ld, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n<<<\n",
+        //        state, systick, pressure_altitude,
+        //        pressure_velocity,
+        //        longitude, latitude, gps_altitude,
+        //        acceleration.x, acceleration.y, acceleration.z,
+        //        gyro.x, gyro.y, gyro.z,
+        //        roll, pitch, heading);
+
+        printf("run_time: %lu\n", systick);
+        printf("lora_rssi: %d\n", rssi);
+        printf("bmp280_altitude: %f\n", pressure_altitude);
+        printf("bmp280_velocity: %f\n", pressure_velocity);
+        printf("gps_longitude: %ld\n", longitude);
+        printf("gps_latitude: %ld\n", latitude);
+        printf("gps_altitude: %f\n", gps_altitude);
+        printf("imu_accel: x: %f, y: %f, z: %f\n", acceleration.x, acceleration.y, acceleration.z);
+        printf("imu_gyro: x: %f, y: %f, z: %f\n", gyro.x, gyro.y, gyro.z);
+        printf("imu_position: roll: %f, pitch: %f, heading: %f\n", roll, pitch, heading);
+        printf("----------------------------------------------\n");
 
         gpio_set_level(CONFIG_INDI_LED, led_status);
         led_status = !led_status;
       }
-      rssi = GetRssiInst();
     }
   }
 }

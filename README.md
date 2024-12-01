@@ -9,8 +9,8 @@ Tasks including:
 * main: Main branch that contains stable and funtional version 
 * sensors: Contains any newest development on sensors modules -> **done, for now at least**
 * storage: Contains storage modules such as data logger & SD card -> **done**
-* commu: Contains the developments of communication modules like LoRa -> **done**
-* stm: Contains stm and it's slaves development such as ADC, buzzer, servo motors...
+* commu/recv: Contains the developments of communication modules like LoRa -> **done**
+* slave: Contains stm and it's slaves development such as ADC, buzzer, servo motors...
 * fsm: Finite state machine -> **done**
 
 ## Current situation
