@@ -8,10 +8,10 @@
 
 #include "bmp280.h"
 #include "comm.h"
+#include "fsm.h"
 #include "gps.h"
 #include "imu.h"
 #include "storage.h"
-#include "fsm.h"
 
 #define sensor_freq 100
 

@@ -9,7 +9,7 @@
 #include "gps.h"
 #include "imu.h"
 #include "ra01s.h"
-// #include "slave.h"
+#include "slave.h"
 
 typedef enum {
   FSM_INIT,

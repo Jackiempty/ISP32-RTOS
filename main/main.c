@@ -6,9 +6,9 @@
 #include <stdio.h>
 
 #include "include/comm.h"
-#include "include/sensors.h"
 #include "include/fsm.h"
 #include "include/recv.h"
+#include "include/sensors.h"
 
 static int log_vprintf(const char *fmt, va_list arguments) {
   static FILE *f = NULL;
@@ -36,15 +36,16 @@ void app_main() {
   // xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
   // xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
   // xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
-  if (sd_init() == ESP_OK) {
+  // (sd_init() == ESP_OK) {
+  if (1) {
     printf("I am an on-board avionics board!\n");
-    storage_init(NULL);
-    esp_log_set_vprintf(log_vprintf);
+    // storage_init(NULL);
+    // esp_log_set_vprintf(log_vprintf);
     vTaskDelay(pdMS_TO_TICKS(1000));
     xTaskCreatePinnedToCore(sensors_task, "sensors_task", 8192, NULL, 6, NULL, 1);
     xTaskCreatePinnedToCore(fsm_task, "fsm_task", 4096, NULL, 5, NULL, 1);
     xTaskCreatePinnedToCore(comm_task, "comm_task", 4096, NULL, 3, NULL, 0);
-    xTaskCreatePinnedToCore(sensors_print, "sensors_print", 2048, NULL, 2, NULL, 0);
+    // xTaskCreatePinnedToCore(sensors_print, "sensors_print", 2048, NULL, 2, NULL, 0);
   } else {
     printf("I am a ground receiver board!\n");
     vTaskDelay(pdMS_TO_TICKS(1000));

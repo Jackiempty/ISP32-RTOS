@@ -46,11 +46,12 @@ void fsm_task(void* args) {
           if (pressure_instance->relative_altitude <= 20) {
             state = FSM_GROUND;
           }
-        } else if (flight_time >= 30000) {
+        } else if (flight_time >= 30000 || (imu_instance->a.x < 0.3 && imu_instance->a.y < 0.3 && imu_instance->a.z < 0.3)) {
           state = FSM_APOGEE;
         }
         break;
       case FSM_APOGEE:
+        vTaskDelay(2000);
         state = FSM_PARACHUTE;
         break;
       case FSM_PARACHUTE: {
@@ -95,6 +96,4 @@ void fsm_task(void* args) {
   }
 }
 
-fsm_state_e* fsm_fetch() {
-  return &state;
-}
+fsm_state_e* fsm_fetch() { return &state; }

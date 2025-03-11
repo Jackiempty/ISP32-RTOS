@@ -24,7 +24,7 @@ flash:
 	idf.py flash -p $(SERIAL_PORT)
 
 format:
-	find . -iname '*.h' -o -iname '*.c' | xargs clang-format -i
+	@-find . -name build -type d \! -prune -o -iname '*.h' -o -iname '*.c' | xargs clang-format -i
 
 hook: $(GIT_HOOKS)
 
