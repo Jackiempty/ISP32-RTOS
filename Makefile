@@ -1,4 +1,4 @@
-SoC=esp32s3
+SoC=esp32
 SERIAL_PORT=$(shell ls -d /dev/* | grep usbmodem | head -n1)
 GIT_HOOKS := .git/hooks/applied
 
@@ -8,7 +8,7 @@ all: build post_build flash
 
 update: build post_build flash serial
 
-set_target: sdkconfig
+set_target:
 	idf.py set-target $(SoC)
 
 build:
