@@ -12,11 +12,11 @@ static fsm_state_e* state;
 static inline void comm_dump();
 
 void sensors_init() {
-  comm_buffer = comm_fetch();
+  // comm_buffer = comm_fetch();
   // pressure_altitude_instance = bmp_fetch();
   gps_instance = gps_fetch();
   // imu_instance = imu_fetch();
-  state = fsm_fetch();
+  // state = fsm_fetch();
   // All sensors' update tasks are created in each init()
   // bmp280_init();
   // imu_init();
@@ -26,7 +26,7 @@ void sensors_init() {
 void sensors_task() {
   while (1) {
     systick = bsp_current_time();
-    comm_dump();
+    // comm_dump();
     // ESP_LOGI(TAG, "%u, %lu, %f, %f, %ld, %ld, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n", *state, systick,
     //          pressure_altitude_instance->relative_altitude, pressure_altitude_instance->velocity, gps_instance->longitude,
     //          gps_instance->latitude, gps_instance->altitude, imu_instance->a.x, imu_instance->a.y, imu_instance->a.z, imu_instance->g.x,

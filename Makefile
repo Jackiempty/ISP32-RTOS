@@ -1,5 +1,5 @@
 SoC=esp32
-SERIAL_PORT=$(shell ls -d /dev/* | grep usbmodem | head -n1)
+SERIAL_PORT=$(shell ls -d /dev/* | grep usb | head -n1)
 GIT_HOOKS := .git/hooks/applied
 
 .PHONY: all build post_build clean flash serial update format hook

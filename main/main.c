@@ -24,18 +24,20 @@ static int log_vprintf(const char *fmt, va_list arguments) {
 }
 
 void app_main() {
-  gpio_init();
-  i2c_init();
+  // gpio_init();
+  // i2c_init();
   uart_init();
-  spi_init(LORA_SPI_HOST, CONFIG_LORA_MOSI_GPIO, CONFIG_LORA_MISO_GPIO, CONFIG_LORA_SCK_GPIO);
-  spi_init(SD_SPI_HOST, CONFIG_SD_MOSI_GPIO, CONFIG_SD_MISO_GPIO, CONFIG_SD_SCK_GPIO);
+  // spi_init(LORA_SPI_HOST, CONFIG_LORA_MOSI_GPIO, CONFIG_LORA_MISO_GPIO, CONFIG_LORA_SCK_GPIO);
+  // spi_init(SD_SPI_HOST, CONFIG_SD_MOSI_GPIO, CONFIG_SD_MISO_GPIO, CONFIG_SD_SCK_GPIO);
   sensors_init();
-  lora_init();
+  // lora_init();
 
-  // example of task creation:
-  // xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
-  // xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
-  // xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
+  /* example of task creation:
+  xTaskCreate(task1, "task1", 2048, NULL, 4, NULL);
+  xTaskCreatePinnedToCore(wdt_task, "wdt_task", 2048, NULL, 1, NULL, 1);
+  xTimerStart(xTimerCreate("sensors_task", pdMS_TO_TICKS(500), pdTRUE, (void *)0, sensors_task), 0);
+  */
+
   // (sd_init() == ESP_OK) {
   if (1) {
     printf("I am an on-board avionics board!\n");
@@ -43,8 +45,8 @@ void app_main() {
     // esp_log_set_vprintf(log_vprintf);
     vTaskDelay(pdMS_TO_TICKS(1000));
     xTaskCreatePinnedToCore(sensors_task, "sensors_task", 8192, NULL, 6, NULL, 1);
-    xTaskCreatePinnedToCore(fsm_task, "fsm_task", 4096, NULL, 5, NULL, 1);
-    xTaskCreatePinnedToCore(comm_task, "comm_task", 4096, NULL, 3, NULL, 0);
+    // xTaskCreatePinnedToCore(fsm_task, "fsm_task", 4096, NULL, 5, NULL, 1);
+    // xTaskCreatePinnedToCore(comm_task, "comm_task", 4096, NULL, 3, NULL, 0);
     xTaskCreatePinnedToCore(sensors_print, "sensors_print", 4096, NULL, 2, NULL, 0);
   } else {
     printf("I am a ground receiver board!\n");

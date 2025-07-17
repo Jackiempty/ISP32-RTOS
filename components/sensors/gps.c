@@ -88,6 +88,7 @@ void gps_parse_task() {
     if (xQueueReceive(*uart_queue, &event, pdMS_TO_TICKS(100))) {
       switch (event.type) {
         case UART_DATA:
+          ESP_LOGI(TAG, "UART_DATA");
           break;
         case UART_FIFO_OVF:
           ESP_LOGW(TAG, "HW FIFO Overflow");
@@ -125,6 +126,8 @@ void gps_parse_task() {
           ESP_LOGW(TAG, "unknown uart event type: %d", event.type);
           break;
       }
+    } else {
+      ESP_LOGW(TAG, "No uart receive");
     }
   }
 }
