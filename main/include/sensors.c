@@ -85,16 +85,17 @@ static void comm_dump() {
 
 void sensors_print() {
   while (1) {
-    printf("run_time: %lu\n", systick);
+    // printf("run_time: %lu\n", systick);
     // printf("bmp280_altitude: %f\n", pressure_altitude_instance->relative_altitude);
     // printf("bmp280_velocity: %f\n", pressure_altitude_instance->velocity);
-    printf("gps_longitude: %ld\n", gps_instance->longitude);
-    printf("gps_latitude: %ld\n", gps_instance->latitude);
-    printf("gps_altitude: %f\n", gps_instance->altitude);
+    printf("Location: %ld,%ld  Time: %d:%d:%d\n", gps_instance->longitude, gps_instance->latitude, gps_instance->time.hour, gps_instance->time.minute, gps_instance->time.second);
+    // printf("gps_longitude: %ld\n", gps_instance->longitude);
+    // printf("gps_latitude: %ld\n", gps_instance->latitude);
+    // printf("gps_altitude: %f\n", gps_instance->altitude);
     // printf("imu_accel: x: %f, y: %f, z: %f\n", imu_instance->a.x, imu_instance->a.y, imu_instance->a.z);
     // printf("imu_gyro: x: %f, y: %f, z: %f\n", imu_instance->g.x, imu_instance->g.y, imu_instance->g.z);
     // printf("imu_position: roll: %f, pitch: %f, heading: %f\n", imu_instance->roll, imu_instance->pitch, imu_instance->heading);
-    printf("----------------------------------------------\n");
+    // printf("----------------------------------------------\n");
     vTaskDelay(pdMS_TO_TICKS(500));
   }
 }

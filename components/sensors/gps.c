@@ -113,7 +113,7 @@ void gps_parse_task() {
           // printf("Enter UART parse case\n");
           pos = uart_pattern_pop_pos(GPS_UART_NUM);
           if (pos != -1) {
-            ESP_LOGI(TAG, "UART received!");
+            // ESP_LOGI(TAG, "UART received!");
             int read_len = uart_read_bytes(GPS_UART_NUM, buffer, pos + 1, 100 / portTICK_PERIOD_MS);
             buffer[read_len] = '\0';
             gps_parser((uint8_t *)buffer);
