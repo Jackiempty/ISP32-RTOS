@@ -34,4 +34,4 @@ $(GIT_HOOKS):
 	@echo
 
 clean:
-	rm -rf build/
+	rm -rf build/ sdkconfig
