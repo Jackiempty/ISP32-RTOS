@@ -10,7 +10,7 @@ void gps_init() {
 }
 
 static inline void gps_parser(uint8_t *raw) {
-  // printf("%s", raw);
+  printf("%s", raw);
   /* Only prase GGA message */
   if (strstr((char *)raw, "GGA") == NULL) return;
   static nmea_t parsed;
